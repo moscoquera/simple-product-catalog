@@ -1,0 +1,66 @@
+version: '3.7'
+
+services:
+  backend:
+    build:
+      context: '.'
+      args:
+        uid: ${UID}
+    container_name: phptest-backend
+    environment:
+      - APACHE_RUN_USER=#${UID}
+      - APACHE_RUN_GROUP=#${UID}
+    volumes:
+      - ./backend:/var/www/html
+    ports:
+      - 8001:80
+    networks:
+      backend:
+        aliases:
+          - backend
+      frontend:
+        aliases:
+          - frontend
+
+  frontend:
+    build:
+      context: '.'
+      args:
+        uid: ${UID}
+    container_name: phptest-frontend
+    environment:
+      - APACHE_RUN_USER=#${UID}
+      - APACHE_RUN_GROUP=#${UID}
+    volumes:
+      - ./backend:/var/www/html
+    ports:
+      - 8002:80
+    networks:
+      frontend:
+        aliases:
+          - frontend
+
+  db:
+    image: mysql:5.7
+    container_name: phptest-db
+    volumes:
+      - db-data:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=masterpassword
+      - MYSQL_DATABASE=db
+      - MYSQL_USER=dbuser
+      - MYSQL_PASSWORD=secret
+    networks:
+      backend:
+        aliases:
+          - db
+
+volumes:
+  db-data:
+
+
+networks:
+  backend:
+    name: backend-network
+  frontend:
+    name: frontend-network
