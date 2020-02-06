@@ -15,7 +15,14 @@ Auth::routes(['register' => false]);
 Route::get('auth/token','Auth\LoginController@getToken');
 Route::post('auth/token','Auth\LoginController@postToken');
 
-//SPA
-Route::get('/{any}', function (){
-    return view('dashboard');
-})->where('any','.*');
+
+Route::middleware('auth')->group(function (){
+
+    //SPA
+    Route::get('/{any}', function (){
+        return view('dashboard');
+    })->where('any','.*');
+
+
+});
+

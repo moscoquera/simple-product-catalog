@@ -15,6 +15,10 @@
                     <li class="nav-item">
                         <router-link to="/products" class="nav-link">Products</router-link>
                     </li>
+
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" @click="logout()">Logout</a>
+                    </li>
                 </ul>
             </nav><br />
 
@@ -37,5 +41,19 @@
 <script>
 
     export default{
+        methods:{
+            logout:function () {
+                axios.post('/logout',null,{
+                    maxRedirects:0
+                }).then(response=> {
+                        Location.href='/';
+                        location.reload();
+                    }
+                ).catch(error=>{
+                    Location.href='/';
+                    location.reload();
+                });
+            }
+        }
     }
 </script>

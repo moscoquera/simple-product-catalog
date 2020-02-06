@@ -44,6 +44,18 @@ class LoginController extends Controller
     }
 
 
+    public function logout(Request $request)
+    {
+        $this->guard()->logout();
+
+        $request->session()->invalidate();
+
+        $request->session()->regenerateToken();
+
+        return $this->loggedOut($request);
+    }
+
+
     /**
      * Send the post-authentication response.
      *

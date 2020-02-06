@@ -1944,7 +1944,25 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-/* harmony default export */ __webpack_exports__["default"] = ({});
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  methods: {
+    logout: function logout() {
+      axios.post('/logout', null, {
+        maxRedirects: 0
+      }).then(function (response) {
+        Location.href = '/';
+        location.reload();
+      })["catch"](function (error) {
+        Location.href = '/';
+        location.reload();
+      });
+    }
+  }
+});
 
 /***/ }),
 
@@ -38765,7 +38783,23 @@ var render = function() {
                   )
                 ],
                 1
-              )
+              ),
+              _vm._v(" "),
+              _c("li", { staticClass: "nav-item" }, [
+                _c(
+                  "a",
+                  {
+                    staticClass: "nav-link",
+                    attrs: { href: "#" },
+                    on: {
+                      click: function($event) {
+                        return _vm.logout()
+                      }
+                    }
+                  },
+                  [_vm._v("Logout")]
+                )
+              ])
             ])
           ]
         ),
@@ -38856,11 +38890,11 @@ var staticRenderFns = [
     return _c("div", { staticClass: "row justify-content-center" }, [
       _c("div", { staticClass: "col-md-8" }, [
         _c("div", { staticClass: "card card-default" }, [
-          _c("div", { staticClass: "card-header" }, [_vm._v("Home Component")]),
+          _c("div", { staticClass: "card-header" }, [_vm._v("Home")]),
           _vm._v(" "),
           _c("div", { staticClass: "card-body" }, [
             _vm._v(
-              "\n                I'm the Home Component component.\n            "
+              "\n                Click Categories or Products at top\n            "
             )
           ])
         ])

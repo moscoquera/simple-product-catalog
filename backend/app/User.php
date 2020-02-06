@@ -6,12 +6,13 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
+use Laravel\Passport\HasApiTokens;
 use Srmklive\Authy\Auth\TwoFactor\Authenticatable as TwoFactorAuthenticatable;
 use Srmklive\Authy\Contracts\Auth\TwoFactor\Authenticatable as TwoFactorAuthenticatableContract;
 
 class User extends Authenticatable implements TwoFactorAuthenticatableContract
 {
-    use Notifiable,TwoFactorAuthenticatable;
+    use Notifiable,TwoFactorAuthenticatable,HasApiTokens;
 
     /**
      * The attributes that are mass assignable.

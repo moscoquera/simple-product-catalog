@@ -59,11 +59,13 @@ services:
 
   mailhog:
     image: easyengine/mailhog
+    container_name: phptest-mailhog
     networks:
       backend:
         aliases:
           - mailhog
-
+    ports:
+      - 8025:8025
 
 volumes:
   db-data:
