@@ -1,6 +1,9 @@
 <?php
 
 
+use App\Providers\Email2FAProvider;
+use App\Services\EmailTokenAuthProvider;
+
 return [
 
     /*
@@ -175,7 +178,7 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-        Srmklive\Authy\Providers\AuthyServiceProvider::class,
+        //Srmklive\Authy\Providers\AuthyServiceProvider::class,
 
     ],
 
@@ -227,7 +230,8 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
-        'Authy' => Srmklive\Authy\Facades\Authy::class
+        'Authy' => Srmklive\Authy\Facades\Authy::class,
+        'Srmklive\Authy\Services\Authy' => EmailTokenAuthProvider::class,
 
     ],
 

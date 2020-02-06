@@ -45,10 +45,21 @@ RUN docker-php-ext-install \
     pdo_mysql \
     zip
 
+ARG XDEBUG_KEY
+ARG REMOTE_HOST
+
 RUN yes | pecl install xdebug \
     && echo "zend_extension=$(find /usr/local/lib/php/extensions/ -name xdebug.so)" > /usr/local/etc/php/conf.d/xdebug.ini \
+    && echo "xdebug.default_enable=on" >> /usr/local/etc/php/conf.d/xdebug.ini \
     && echo "xdebug.remote_enable=on" >> /usr/local/etc/php/conf.d/xdebug.ini \
-    && echo "xdebug.remote_autostart=off" >> /usr/local/etc/php/conf.d/xdebug.ini
+    && echo "xdebug.remote_autostart=on" >> /usr/local/etc/php/conf.d/xdebug.ini \
+    && echo "xdebug.remote_port=9001" >> /usr/local/etc/php/conf.d/xdebug.ini \
+    && echo "xdebug.remote_handler=dbgp" >> /usr/local/etc/php/conf.d/xdebug.ini \
+    && echo "xdebug.remote_connect_back=0" >> /usr/local/etc/php/conf.d/xdebug.ini \
+    && echo "xdebug.idekey=$XDEBUG_KEY" >> /usr/local/etc/php/conf.d/xdebug.ini \
+    && echo "xdebug.remote_host=$REMOTE_HOST" >> /usr/local/etc/php/conf.d/xdebug.ini
+
+EXPOSE 9001
 
 # 5. composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer

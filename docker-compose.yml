@@ -6,6 +6,8 @@ services:
       context: '.'
       args:
         uid: ${UID}
+        XDEBUG_KEY: backend
+        REMOTE_HOST: 172.28.0.1
     container_name: phptest-backend
     environment:
       - APACHE_RUN_USER=#${UID}
@@ -54,6 +56,14 @@ services:
       backend:
         aliases:
           - db
+
+  mailhog:
+    image: easyengine/mailhog
+    networks:
+      backend:
+        aliases:
+          - mailhog
+
 
 volumes:
   db-data:
