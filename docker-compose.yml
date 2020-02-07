@@ -34,7 +34,7 @@ services:
       - APACHE_RUN_USER=#${UID}
       - APACHE_RUN_GROUP=#${UID}
     volumes:
-      - ./backend:/var/www/html
+      - ./frontend:/var/www/html
     ports:
       - 8002:80
     networks:

@@ -62,7 +62,7 @@
                     this.axios.delete(uri).then(response=>{
                         this.categories.splice(this.categories.indexOf(category), 1);
                     }).catch(error=>{
-                        alert('error deleting the category: '+error.message)
+                        alert('error deleting the category: '+error.response.data.message re)
                     });
                 }
             }

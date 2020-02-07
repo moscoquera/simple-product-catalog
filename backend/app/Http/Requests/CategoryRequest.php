@@ -26,7 +26,7 @@ class CategoryRequest extends FormRequest
         return [
             'name'=>'required',
             'image'=>'required|is_base64_img',
-            'parent_id'=>'nullable|exists:categories,id'
+            'parent_id'=>'nullable|exists:categories,id',
         ];
     }
 

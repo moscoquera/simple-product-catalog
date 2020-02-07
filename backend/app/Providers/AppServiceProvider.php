@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\Category;
 use App\Services\EmailTokenAuthProvider;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\ServiceProvider;
@@ -42,6 +43,13 @@ class AppServiceProvider extends ServiceProvider
             $f = finfo_open();
             $result = finfo_buffer($f, $image, FILEINFO_MIME_TYPE);
             return substr($result,0,5)=='image';
+        });
+
+        Validator::extend('is_leaf_category',function($attribute, $value, $params, $validator) {
+
+            $category = Category::query()->where('id',$value)->leaf()->first();
+
+            return false;
         });
     }
 }

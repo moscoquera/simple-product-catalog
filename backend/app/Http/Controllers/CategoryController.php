@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CategoryDeleteRequest;
 use App\Http\Requests\CategoryRequest;
 use App\Http\Requests\CategoryUpdateRequest;
 use App\Http\Resources\CategoryCollection;
@@ -18,9 +19,14 @@ class CategoryController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return new CategoryCollection(Category::with('parent')->get());
+
+        $query = Category::with('parent');
+        if($request->get('leaf')){
+            $query=$query->leaf();
+        }
+        return new CategoryCollection($query->get());
     }
 
     /**
@@ -31,12 +37,19 @@ class CategoryController extends Controller
      */
     public function store(CategoryRequest $request)
     {
-        $path = $request->file('image')->store('categories',['disk' => 'public']);
-        $category = new Category([
-            'name'=>$request->post('name'),
-            'parent_id'=>$request->post('parent_id'),
-            'image'=>$path
-        ]);
+        $new_data=[];
+        $new_data=$request->only(['name','parent_id']);
+        $base64_image = $request->input('image'); // your base64 encoded
+        if($base64_image){
+            @list($type, $file_data) = explode(';', $base64_image);
+            @list(, $file_data) = explode(',', $file_data);
+            $imgExt = str_replace('data:image/', '', $type);
+            $filename = 'categories/'.uniqid().'.'.$imgExt;
+            Storage::disk('public')->put($filename, base64_decode($file_data));
+            $new_data['image']=$filename;
+        }
+
+        $category = new Category($new_data);
 
         $category->save();
 
@@ -92,6 +105,15 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
-        $category->delete();
+        if($category->childs->count()==0 && $category->products->count()==0){
+            $category->delete();
+        }else{
+            return response()->json(array(
+                'message'=>'Category Must be empty'
+            ),422);
+        }
+
+
+
     }
 }

@@ -68,7 +68,6 @@
     import VueBase64FileUpload from 'vue-base64-file-upload'
     import vSelect from 'vue-select'
     import Vuelidate from 'vuelidate'
-    import FormData from 'form-data'
     Vue.use(Vuelidate)
     import { required, minLength,maxLength } from 'vuelidate/lib/validators'
 
@@ -99,8 +98,7 @@
         components: {
             VueBase64FileUpload,
             vSelect:vSelect,
-            Vuelidate,
-            FormData:FormData
+            Vuelidate
         },
         validations:{
                 name:{
@@ -111,14 +109,6 @@
             fetchCategories:function (search,loading) {
                 loading(true);
                 axios.get('/api/categories').then(res => {
-                    let selected=null;
-
-                    for(let category in res.data.data){
-                        if(this.parent && res.data.data[category].id==this.parent.id){
-                            selected=res.data.data[category];
-                        }
-                    }
-
                     this.categories=res.data.data;
                     loading(false);
                 });

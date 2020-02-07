@@ -15,6 +15,7 @@ use Illuminate\Http\Request;
 
 Route::middleware('auth:api')->group(function () {
     Route::resource('categories','CategoryController');
+    Route::resource('products','ProductController');
 });
 
 

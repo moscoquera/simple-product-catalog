@@ -13,8 +13,8 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Category Name:</label>
-                                    <input type="text" class="form-control" v-model="category.name">
-                                    <div class="error" v-if="!$v.category.name.required">Name is required</div>
+                                    <input type="text" class="form-control" v-model="name">
+                                    <div class="error" v-if="!$v.name.required">Name is required</div>
                                 </div>
                             </div>
                         </div>
@@ -24,9 +24,15 @@
                                 <div class="form-group">
                                     <label>Category Image:</label>
                                     <br/>
-                                    <img :src="category.image_url ? category.image_url : 'https://www.gravatar.com/avatar/default?s=200&r=pg&d=mm'"  class="rounded-circle" style="max-height: 200px"/>
-                                    <br/>
-                                    <input type="file" class="form-control" @change="processImage($event)" accept="image/*">
+                                    <vue-base64-file-upload
+                                        class="v1"
+                                        accept="image/png,image/jpeg"
+                                        image-class="v1-image"
+                                        input-class="v1-input"
+                                        :default-preview="image_url"
+                                        :max-size="1"
+                                        @file="onImageFile"
+                                        @load="onImageLoad" />
                                 </div>
                             </div>
                         </div>
@@ -35,7 +41,9 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Parent Category:</label>
-                                    <v-select @search="fetchCategories" v-model="category.parent" :options="categories"></v-select>
+                                    <v-select @search="fetchCategories" v-model="parent" :options="categories"
+                                    label="name"
+                                    ></v-select>
                                 </div>
                             </div>
                         </div>
@@ -54,10 +62,9 @@
 <script>
 
     import Vue from "vue";
-    const VueUploadComponent = require('vue-upload-component')
+    import VueBase64FileUpload from 'vue-base64-file-upload'
     import vSelect from 'vue-select'
     import Vuelidate from 'vuelidate'
-    import FormData from 'form-data'
     Vue.use(Vuelidate)
     import { required, minLength,maxLength } from 'vuelidate/lib/validators'
 
@@ -69,41 +76,46 @@
         },
         data(){
             return {
-                category:{
-                    image_url:''
-                },
+                name:'',
+                parent:null,
+                image:null,
+                image_url:'https://www.gravatar.com/avatar/default?s=200&r=pg&d=mm',
                 categories:[]
             }
         },
         components: {
-            FileUpload: VueUploadComponent,
+            VueBase64FileUpload,
             vSelect:vSelect,
-            Vuelidate:Vuelidate,
-            FormData:FormData
+            Vuelidate
         },
         validations:{
-            category:{
-                name:{
+            name:{
                     required,
                 }
-            }
         },
         methods: {
-
-            processImage:function ($event) {
-                this.category.image=this.someData = $event.target.files[0];
-                this.category.image_url = URL.createObjectURL($event.target.files[0]);
-            },
 
             fetchCategories:function (search,loading) {
                 loading(true);
                 axios.get('/api/categories').then(res => {
-                    this.categories=res.data.data;
-                    for(let category in this.categories){
-                        this.categories[category].label=this.categories[category].name;
+                    let selected=null;
+
+                    for(let category in res.data.data){
+                        if(this.parent && res.data.data[category].id==this.parent.id){
+                            selected=res.data.data[category];
+                        }
                     }
+
+                    this.categories=res.data.data;
                     loading(false);
                 });
+            },
+
+            onImageFile:function (file) {
+
+            },
+            onImageLoad:function (url) {
+                this.image=url;
             },
 
             add:function () {
@@ -117,10 +129,10 @@
                 if (!this.$v.$invalid) {
 
                     var data=new FormData()
-                    data.append('name',this.category.name);
-                    data.append('image',this.category.image);
-                    if(this.category.parent)
-                        data.append('parent_id',this.category.parent.id);
+                    data.append('name',this.name);
+                    data.append('image',this.image);
+                    if(this.parent)
+                        data.append('parent_id',this.parent.id);
 
                     return axios.post('/api/categories', data, config).then(response =>{
                         this.$router.push({name: 'categories_index'});
