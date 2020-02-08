@@ -20,7 +20,7 @@ class ProductController extends Controller
     public function index()
     {
         $query = Product::with('category')->with('images');
-        return new ProductCollectionResource($query->get());
+        return new ProductCollectionResource($query->paginate());
     }
 
     /**

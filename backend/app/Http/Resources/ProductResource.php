@@ -21,6 +21,8 @@ class ProductResource extends JsonResource
             $data['images'][]=Storage::url($img->path);
         }
         $data['category']=CategoryResource::make($this->whenLoaded('category'));
+
+
         return $data;
     }
 }

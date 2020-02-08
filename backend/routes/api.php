@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Http\Request;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,9 +12,16 @@ use Illuminate\Http\Request;
 |
 */
 
+
 Route::middleware('auth:api')->group(function () {
-    Route::resource('categories','CategoryController');
-    Route::resource('products','ProductController');
+    Route::resource('categories','CategoryController')->only([ 'store', 'update', 'destroy']);
+    Route::resource('products','ProductController')->only([ 'store', 'update', 'destroy']);
+});
+
+Route::middleware(['cors'])->group(function (){
+    Route::resource('categories','CategoryController')->only([ 'index', 'show']);
+    Route::resource('products','ProductController')->only([ 'index', 'show']);
+    Route::get('/categories/{category}/products','CategoryController@products');
 });
 
 

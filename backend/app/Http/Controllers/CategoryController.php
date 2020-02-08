@@ -7,6 +7,7 @@ use App\Http\Requests\CategoryRequest;
 use App\Http\Requests\CategoryUpdateRequest;
 use App\Http\Resources\CategoryCollection;
 use App\Http\Resources\CategoryResource;
+use App\Http\Resources\ProductCollectionResource;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -22,10 +23,15 @@ class CategoryController extends Controller
     public function index(Request $request)
     {
 
-        $query = Category::with('parent');
+        $query = Category::with('parent')->with('childs');
         if($request->get('leaf')){
             $query=$query->leaf();
         }
+
+        if($request->get('top')){
+            $query=$query->top();
+        }
+
         return new CategoryCollection($query->get());
     }
 
@@ -64,7 +70,7 @@ class CategoryController extends Controller
      */
     public function show(Category $category)
     {
-        $category->load('parent');
+        $category->load('parent')->load('childs')->load('childs.childs');
         return new CategoryResource($category);
     }
 
@@ -112,8 +118,10 @@ class CategoryController extends Controller
                 'message'=>'Category Must be empty'
             ),422);
         }
+    }
 
-
-
+    public function products(Category $category)
+    {
+        return new ProductCollectionResource($category->products()->paginate());
     }
 }

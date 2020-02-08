@@ -25,4 +25,8 @@ class Category extends Model
     public function scopeLeaf($query){
         return $query->doesntHave('childs');
     }
+    public function scopeTop($query){
+        return $query->where('parent_id',null);
+    }
+
 }

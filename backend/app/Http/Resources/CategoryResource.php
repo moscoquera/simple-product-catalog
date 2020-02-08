@@ -20,7 +20,8 @@ class CategoryResource extends JsonResource
           'name'=>$this->name,
            'image'=>Storage::url($this->image),
           'parent_id'=>$this->parent_id,
-          'parent'=>CategoryResource::make($this->whenLoaded('parent'))
+          'parent'=>CategoryResource::make($this->whenLoaded('parent')),
+          'childs'=>CategoryCollection::make($this->whenLoaded('childs'))
         ];
     }
 }
