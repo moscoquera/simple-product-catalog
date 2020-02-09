@@ -23,6 +23,11 @@ services:
       frontend:
         aliases:
           - frontend
+    entrypoint:
+      - sh
+      - /var/www/html/init.sh
+      - apache2-foreground
+
 
   frontend:
     build:
@@ -41,12 +46,14 @@ services:
       frontend:
         aliases:
           - frontend
+    entrypoint:
+      - sh
+      - /var/www/html/init.sh
+      - apache2-foreground
 
   db:
     image: mysql:5.7
     container_name: phptest-db
-    volumes:
-      - db-data:/var/lib/mysql
     environment:
       - MYSQL_ROOT_PASSWORD=masterpassword
       - MYSQL_DATABASE=db
@@ -66,9 +73,6 @@ services:
           - mailhog
     ports:
       - 8025:8025
-
-volumes:
-  db-data:
 
 
 networks:

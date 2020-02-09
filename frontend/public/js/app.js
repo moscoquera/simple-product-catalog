@@ -20519,7 +20519,7 @@ __webpack_require__.r(__webpack_exports__);
   created: function created() {
     var _this = this;
 
-    if (this.$route.name == 'category') {
+    if (this.$route.name == 'category' || this.$route.name == 'home') {
       this.baseAjax = _globals__WEBPACK_IMPORTED_MODULE_2__["remoteServer"].baseAjax + '/categories';
       var url = this.baseAjax;
       var options = {};

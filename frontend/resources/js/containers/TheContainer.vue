@@ -41,7 +41,7 @@
 
         },
         created(){
-            if(this.$route.name=='category'){
+            if(this.$route.name=='category' || this.$route.name=='home'){
                 this.baseAjax = remoteServer.baseAjax+'/categories';
                 let url= this.baseAjax;
                 let options={}

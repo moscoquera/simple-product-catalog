@@ -43,7 +43,9 @@ RUN docker-php-ext-install \
     calendar \
     mbstring \
     pdo_mysql \
-    zip
+    zip \
+    gd
+
 
 ARG XDEBUG_KEY
 ARG REMOTE_HOST
