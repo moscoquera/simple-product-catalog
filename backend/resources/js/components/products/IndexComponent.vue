@@ -40,6 +40,22 @@
                         </tr>
                         </tbody>
                     </table>
+
+                    <paginate
+                        v-model="current_page"
+                        :page-count="last_page"
+                        :prev-text="'Prev'"
+                        :next-text="'Next'"
+                        :container-class="'pagination pagination-lg'"
+                        :pageClass="'page-item'"
+                        :pageLinkClass="'page-link'"
+                        :prevClass="'page-item'"
+                        :prevLinkClass="'page-link'"
+                        :nextClass="'page-item'"
+                        :nextLinkClass="'page-link'"
+                    >
+                    </paginate>
+
                 </div>
             </div>
         </div>
@@ -54,14 +70,13 @@
         },
         data() {
             return {
-                products: []
+                products: [],
+                current_page:1,
+                last_page:1,
             }
         },
         created() {
-            let uri = '/api/products';
-            this.axios.get(uri).then(response => {
-                this.products = response.data.data;
-            });
+            this.populate();
         },
         methods:{
             deleteProduct(product) {
@@ -73,6 +88,24 @@
                         alert('error deleting the product: '+error.message)
                     });
                 }
+            },
+            populate(){
+                let url = '/api/products'
+                let options={
+                    params:{
+                        page:this.current_page
+                    }
+                };
+
+                axios.get(url,options).then(response=>{
+                    this.products=response.data.data;
+                    this.last_page=response.data.meta.last_page;
+                });
+            }
+        },
+        watch:{
+            current_page:function () {
+                this.populate();
             }
         }
     }

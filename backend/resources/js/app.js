@@ -20,12 +20,13 @@ import VueRouter from 'vue-router';
 Vue.use(VueRouter);
 
 import VueAxios from 'vue-axios';
-import axios from 'axios'
+import axios from 'axios';
+import Paginate from 'vuejs-paginate';
 import App from "./App";
 
 
 Vue.use(VueAxios,axios);
-
+Vue.component('paginate', Paginate)
 
 import HomeComponent from "./components/HomeComponent";
 

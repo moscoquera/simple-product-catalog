@@ -32,7 +32,7 @@ class CategoryController extends Controller
             $query=$query->top();
         }
 
-        return new CategoryCollection($query->get());
+        return new CategoryCollection($query->paginate());
     }
 
     /**

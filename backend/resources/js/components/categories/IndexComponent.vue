@@ -32,6 +32,20 @@
                         </tr>
                         </tbody>
                     </table>
+                    <paginate
+                        v-model="current_page"
+                        :page-count="last_page"
+                        :prev-text="'Prev'"
+                        :next-text="'Next'"
+                        :container-class="'pagination'"
+                        :pageClass="'page-item'"
+                        :pageLinkClass="'page-link'"
+                        :prevClass="'page-item'"
+                        :prevLinkClass="'page-link'"
+                        :nextClass="'page-item'"
+                        :nextLinkClass="'page-link'"
+                    >
+                    </paginate>
                 </div>
             </div>
         </div>
@@ -46,14 +60,13 @@
         },
         data() {
             return {
-                categories: []
+                categories: [],
+                current_page:1,
+                last_page:1,
             }
         },
         created() {
-            let uri = '/api/categories';
-            this.axios.get(uri).then(response => {
-                this.categories = response.data.data;
-            });
+            this.populate()
         },
         methods:{
             deleteCategory(category) {
@@ -65,6 +78,24 @@
                         alert('error deleting the category: '+error.response.data.message)
                     });
                 }
+            },
+            populate(){
+                let url = '/api/categories';
+                let options={
+                    params:{
+                        page:this.current_page
+                    }
+                };
+
+                axios.get(url,options).then(response=>{
+                    this.categories=response.data.data;
+                    this.last_page=response.data.meta.last_page;
+                });
+            }
+        },
+        watch:{
+            current_page:function () {
+                this.populate();
             }
         }
     }
