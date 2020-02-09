@@ -4,7 +4,7 @@ export const remoteServer = {
 }
 
 export const currency = {
-    key:'67e79adf2b7d0c098d23a94f39cc6265',
+    key:'9920712c4284b199a4b8d19b171b0f2e',
     endpoint:'http://apilayer.net/api/live',
     base:'USD',
     to:'COP'
