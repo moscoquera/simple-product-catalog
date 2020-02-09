@@ -42,7 +42,7 @@ class CategorySeeder extends Seeder
 
             $fields['image']=$filename;
 
-            if(mt_rand(0,1)){
+            if(mt_rand(0,1) && Category::all()->count()>0){
                 $parent = Category::all()->random(1)->first();
                 if($parent){
                     $fields['parent_id']=$parent->id;

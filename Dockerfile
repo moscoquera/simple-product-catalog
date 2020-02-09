@@ -61,6 +61,8 @@ RUN yes | pecl install xdebug \
     && echo "xdebug.idekey=$XDEBUG_KEY" >> /usr/local/etc/php/conf.d/xdebug.ini \
     && echo "xdebug.remote_host=$REMOTE_HOST" >> /usr/local/etc/php/conf.d/xdebug.ini
 
+RUN /etc/init.d/apache2 restart
+
 EXPOSE 9001
 
 # 5. composer

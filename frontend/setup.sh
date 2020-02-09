@@ -1,9 +1,11 @@
 #!/usr/bin/env bash
 
+rm -rf vendor
+rm -rf node_modules
+
 composer require
 
 
-rm -rf node_modules
 rm package-lock.json yarn.lock
 npm cache clear --force
 npm install --global cross-env
