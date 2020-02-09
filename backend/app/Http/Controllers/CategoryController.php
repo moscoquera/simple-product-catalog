@@ -32,7 +32,7 @@ class CategoryController extends Controller
             $query=$query->top();
         }
 
-        return new CategoryCollection($query->paginate());
+        return new CategoryCollection($query->orderBy('id')->paginate());
     }
 
     /**

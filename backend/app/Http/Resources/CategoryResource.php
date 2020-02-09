@@ -18,7 +18,7 @@ class CategoryResource extends JsonResource
         return [
           'id'=>$this->id,
           'name'=>$this->name,
-           'image'=>Storage::url($this->image),
+          'image'=>Storage::url($this->image),
           'parent_id'=>$this->parent_id,
           'parent'=>CategoryResource::make($this->whenLoaded('parent')),
           'childs'=>CategoryCollection::make($this->whenLoaded('childs'))
